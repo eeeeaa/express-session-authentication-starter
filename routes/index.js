@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const passport = require("passport");
 const { genPassword } = require("../lib/passwordUtils");
+const { isAuth, isAdmin } = require("../lib/authUtils");
 const User = require("../models/user");
 
 /**
@@ -27,6 +28,7 @@ router.post("/register", async (req, res, next) => {
     username: req.body.uname,
     hash: hash,
     salt: salt,
+    admin: true, //hardcode to true for testing
   });
 
   await newUser.save();
@@ -70,17 +72,18 @@ router.get("/register", (req, res, next) => {
  *
  * Also, look up what behaviour express session has without a maxage set
  */
-router.get("/protected-route", (req, res, next) => {
-  // This is how you check if a user is authenticated and protect a route.  You could turn this into a custom middleware to make it less redundant
-  if (req.isAuthenticated()) {
-    res.send(
-      '<h1>You are authenticated</h1><p><a href="/logout">Logout and reload</a></p>'
-    );
-  } else {
-    res.send(
-      '<h1>You are not authenticated</h1><p><a href="/login">Login</a></p>'
-    );
-  }
+
+//we can create custom middleware for authentication or do it directly in the callback
+router.get("/protected-route", isAuth, (req, res, next) => {
+  res.send(
+    '<h1>You are authenticated</h1><p><a href="/logout">Logout and reload</a></p>'
+  );
+});
+
+router.get("/admin-route", isAdmin, (req, res, next) => {
+  res.send(
+    '<h1>You are an admin</h1><p><a href="/logout">Logout and reload</a></p>'
+  );
 });
 
 // Visiting this route logs the user out
@@ -95,7 +98,7 @@ router.get("/logout", (req, res, next) => {
 
 router.get("/login-success", (req, res, next) => {
   res.send(
-    '<p>You successfully logged in. --> <a href="/protected-route">Go to protected route</a></p>'
+    '<p>You successfully logged in. --> <a href="/protected-route">Go to protected route</a></p>, <a href="/admin-route">Go to admin route</a></p>'
   );
 });
 

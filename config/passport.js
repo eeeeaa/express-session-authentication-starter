@@ -34,12 +34,16 @@ const strategy = new LocalStrategy(customFields, verifyCallback);
 //setup passport middleware
 passport.use(strategy);
 
+//serialize user data and store it in session (in this case, we use user id)
 passport.serializeUser((user, done) => {
+  //store user id in session
   done(null, user.id);
 });
 
+//deserialize user data that was stored on the session
 passport.deserializeUser(async (id, done) => {
   try {
+    //get user id from session, then use it to find user in our database
     const user = await User.findById(id);
     done(null, user);
   } catch (err) {

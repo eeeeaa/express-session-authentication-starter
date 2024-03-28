@@ -52,7 +52,16 @@ app.use(
 
 // Need to require the entire Passport config module so app.js knows about it
 require("./config/passport");
+
+//passport setup session/check if there is user in session/etc.
 app.use(passport.session());
+
+//debug log
+app.use((req, res, next) => {
+  console.log(req.session);
+  console.log(req.user);
+  next();
+});
 
 /**
  * -------------- ROUTES ----------------
