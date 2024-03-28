@@ -4,18 +4,25 @@
   "description": "A tutorial on session based user authentication using Passport JS",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devstart": "nodemon app.js",
+    "devwatch": "nodemon --inspect app.js",
+    "serverstart": "DEBUG=express-session-authenticator-starter:* npm run devstart",
+    "serverwatch": "DEBUG=express-session-authenticator-starter:* npm run devwatch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "connect-mongo": "^3.1.2",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-session": "^1.17.0",
-    "mongoose": "^5.7.12",
-    "passport": "^0.4.0",
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "mongoose": "^8.2.3",
+    "passport": "^0.7.0",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
